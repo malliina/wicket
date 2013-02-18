@@ -48,6 +48,9 @@ object GitBuild extends Build {
     LinuxPackaging.rpmSettings ++
     LinuxPackaging.debianSettings ++
     UnixZipPackaging.unixZipSettings
+  val myWebSettings = webSettings ++ Seq(
+    webappResources in Compile <+= (sourceDirectory in Runtime)(sd => sd / "resources" / "publicweb")
+  )
   lazy val wicket = Project("wicket", file("."), settings = commonSettings)
     .settings(wicketSettings: _*)
     .settings(
@@ -59,5 +62,5 @@ object GitBuild extends Build {
     libraryDependencies ++= wiQuery ++ Seq(warDep, util, utilActor, utilRmi, utilAuth, utilJdbc, utilWeb, scalaTest),
     webappResources in Compile <+= (sourceDirectory in Runtime)(sd => sd / "resources" / "publicweb"),
     mainClass := Some("com.mle.wicket.WicketStart"))
-    .settings(webSettings: _*)
+    .settings(myWebSettings: _*)
 }
