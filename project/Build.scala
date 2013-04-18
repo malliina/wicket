@@ -1,5 +1,5 @@
-import com.mle.sbt.unix.{UnixZipPackaging, LinuxPackaging}
-import com.mle.sbt.win.WindowsPlugin
+import com.mle.sbt.unix._
+import com.mle.sbt.win._
 import com.github.siasia.WebPlugin.webSettings
 import com.github.siasia.PluginKeys._
 import com.typesafe.packager.{windows, PackagerPlugin}
@@ -31,7 +31,8 @@ object GitBuild extends Build {
     // ... unless fork is true
     sbt.Keys.fork in Test := true,
     // the jars of modules depended on are not included unless this is true
-    exportJars := true
+    exportJars := true       ,
+    resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
   ) ++ credentialSettings
 
   val beesConfig = MyUtil.optionally(
@@ -43,16 +44,18 @@ object GitBuild extends Build {
     CloudBees.apiSecret := beesConfig get "bees.api.secret",
     CloudBees.username := beesConfig get "bees.project.app.domain"
   )
-  lazy val wicketSettings: Seq[Setting[_]] = PackagerPlugin.packagerSettings ++
-    WindowsPlugin.windowsSettings ++
-    LinuxPackaging.rpmSettings ++
-    LinuxPackaging.debianSettings ++
-    UnixZipPackaging.unixZipSettings
+//  lazy val wicketSettings: Seq[Setting[_]] = PackagerPlugin.packagerSettings ++
+//    WinPlugin.windowsSettings ++
+//    LinuxPlugin.rpmSettings ++
+//    LinuxPlugin.debianSettings ++
+//    UnixZipPackaging.unixZipSettings ++ Seq(
+//    WinKeys.productGuid := "a454f710-8bcc-4aad-919b-2691802a1f05",
+//    WinKeys.upgradeGuid := "6038f07c-629f-4221-8a42-448c5b074d79"
+//  )
   val myWebSettings = webSettings ++ Seq(
     webappResources in Compile <+= (sourceDirectory in Runtime)(sd => sd / "resources" / "publicweb")
   )
   lazy val wicket = Project("wicket", file("."), settings = commonSettings)
-    .settings(wicketSettings: _*)
     .settings(
     CloudBees.applicationId := Some("wicket"),
     CloudBees.apiKey := beesConfig get "bees.api.key",
@@ -60,7 +63,7 @@ object GitBuild extends Build {
     CloudBees.username := beesConfig get "bees.project.app.domain")
     .settings(
     libraryDependencies ++= wiQuery ++ Seq(warDep, util, utilActor, utilRmi, utilAuth, utilJdbc, utilWeb, scalaTest),
-    webappResources in Compile <+= (sourceDirectory in Runtime)(sd => sd / "resources" / "publicweb"),
+//    webappResources in Compile <+= (sourceDirectory in Runtime)(sd => sd / "resources" / "publicweb"),
     mainClass := Some("com.mle.wicket.WicketStart"))
-    .settings(myWebSettings: _*)
+//    .settings(myWebSettings: _*)
 }

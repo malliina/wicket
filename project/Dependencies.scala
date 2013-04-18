@@ -6,13 +6,14 @@ import sbt._
 
 object Dependencies {
   val wiqueryVersion = "6.2.0"
-  val utilVersion = "0.68-SNAPSHOT"
-  val util = "com.mle" %% "util" % utilVersion
-  val utilActor = "com.mle" %% "util-actor" % utilVersion
-  val utilRmi = "com.mle" %% "util-rmi" % utilVersion
-  val utilAuth = "com.mle" %% "util-auth" % utilVersion
-  val utilJdbc = "com.mle" %% "util-jdbc" % utilVersion
-  val utilWeb = "com.mle" %% "util-web" % "0.66-SNAPSHOT"
+  val utilGroup = "com.github.malliina"
+  val utilVersion = "0.69-SNAPSHOT"
+  val util = utilGroup %% "util" % utilVersion
+  val utilActor = utilGroup %% "util-actor" % utilVersion
+  val utilRmi = utilGroup %% "util-rmi" % utilVersion
+  val utilAuth = utilGroup %% "util-auth" % utilVersion
+  val utilJdbc = utilGroup %% "util-jdbc" % utilVersion
+  val utilWeb = utilGroup %% "util-web" % utilVersion
   val warDep = "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
   val wiQueryCore = "org.odlabs.wiquery" % "wiquery-core" % wiqueryVersion
   val wiQueryUi = "org.odlabs.wiquery" % "wiquery-jquery-ui" % wiqueryVersion
